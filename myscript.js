@@ -19,7 +19,7 @@ function computerPlay() {
 // Get player selection and computer selection
 // convert both inputs to lowercase for comparison
 // Three possible victory combinations for each player
-// compare selections and return appropriate outcome message
+// compare selections and return round result
 
 function playRound(playerSelection, computerSelection) {
 
@@ -84,8 +84,8 @@ function calcScore(result) {
 }
 
 // Run a game with five rounds
-// initialize score variables for player and computer in playerScore and computerScore
-// computer selection stored in variable computerSelection
+// Initialize result and score variables
+// Run the playRound function and store its result in result variable
 // prompt for player selection and store in a variable playerSelection
 // run play round function
 // determine winner and increment appropriate score variable
@@ -94,7 +94,7 @@ function calcScore(result) {
 function game() {
   let result;
   let score = 0;
-  
+
   result = playRound(playerPlay(), computerPlay())
   score = score + calcScore(result);
   console.log(result);
