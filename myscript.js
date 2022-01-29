@@ -26,31 +26,31 @@ function playRound(playerSelection, computerSelection) {
   if (playerSelection == 'rock') {
 
       if (computerSelection == 'rock') {
-        return "tie";
+        return 0;
       } else if (computerSelection == 'paper') {
-        return "lose";
+        return -1;
       } else if (computerSelection == 'scissors') {
-        return "win";
+        return 1;
       }
 
   } else if (playerSelection == 'paper') {
 
       if (computerSelection == 'rock') {
-        return "win";
+        return 1;
       } else if (computerSelection == 'paper') {
-        return "tie";
+        return 0;
       } else if (computerSelection == 'scissors') {
-        return "lose";
+        return -1;
       }
 
   } else if (playerSelection == "scissors") {
 
       if (computerSelection == 'rock') {
-        return "lose";
+        return -1;
       } else if (computerSelection == 'paper') {
-        return "win";
+        return 1;
       } else if (computerSelection == 'scissors') {
-        return "tie";
+        return 0;
       }
 
   } else {
@@ -58,75 +58,95 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
-// The player is promted for a selction, which is stored in a varable and returned
+function checkScore(playerScore, computerScore) {
+  const rock = document.querySelector('#rock');
+  const paper = document.querySelector('#paper');
+  const scissors = document.querySelector('#scissors');
+  const endMessage = document.querySelector('#endMessage');
 
-function playerPlay() {
-  const selection = prompt("Rock, Paper, Scissors, Shoot!")
-  return selection.toLowerCase();
-}
-
-// Keeping Score
-// Pass in result of the round as parameter - win lose or tie
-// Score - return 1 if 'win', return -1 if 'lose', return 0 if 'tie'
-
-function calcScore(result) {
-    switch(result) {
-      case 'win':
-        return 1;
-        break;
-      case 'lose':
-        return -1;
-        break;
-      case 'tie':
-        return 0;
-        break;
-    }
-}
-
-// Run a game with five rounds
-// Initialize result and score variables
-// Run the playRound function and store its result in result variable
-// prompt for player selection and store in a variable playerSelection
-// run play round function
-// determine winner and increment appropriate score variable
-// compare score variables
-// print winner message
-function game() {
-  let result;
-  let score = 0;
-
-  result = playRound(playerPlay(), computerPlay())
-  score = score + calcScore(result);
-  console.log(result);
-  console.log(score);
-
-  result = playRound(playerPlay(), computerPlay())
-  score = score + calcScore(result);
-  console.log(result);
-  console.log(score);
-
-  result = playRound(playerPlay(), computerPlay())
-  score = score + calcScore(result);
-  console.log(result);
-  console.log(score);
-
-  result = playRound(playerPlay(), computerPlay())
-  score = score + calcScore(result);
-  console.log(result);
-  console.log(score);
-
-  result = playRound(playerPlay(), computerPlay())
-  score = score + calcScore(result);
-  console.log(result);
-  console.log(score);
-
-  if (score > 0) {
-    console.log("You are the winner!");
-  } else if (score < 0 ) {
-    console.log("The computer is the winner!");
-  } else {
-    console.log("You tied the computer!");
+  if (playerScore == 5) {
+    endMessage.textContent = "You are the winner!";
+    rock.remove();
+    paper.remove();
+    scissors.remove();
+  } else if (computerScore == 5) {
+    endMessage.textContent = "The computer is the winner!";
+    rock.remove();
+    paper.remove();
+    scissors.remove();
   }
 }
+
+// I ended up with a lot of duplicate code here. The problem is that I could
+// not figure out how to loop over this game with the buttons. Every loop I
+// tried would just run through, there was nothing to stop execution and wait
+// for player choice. My solution was to check all the game conditions inside
+// of each eventListener. I wanted to extract all that code into one locations,
+// I just couldn't figure out how to do it.
+
+function game() {
+  let result;
+  let playerSelection;
+  let computerSelection;
+  let playerScore = 0;
+  let computerScore = 0;
+  const rock = document.querySelector('#rock');
+  const paper = document.querySelector('#paper');
+  const scissors = document.querySelector('#scissors');
+  const score = document.querySelector('#score');
+  const roundMessage = document.querySelector('#roundMessage');
+  const endMessage = document.querySelector('#endMessage');
+
+    rock.addEventListener('click', () => {
+      playerSelection = "rock";
+      computerSelection = computerPlay();
+      result = playRound(playerSelection, computerSelection);
+      if (result == 1) {
+        playerScore += 1;
+        roundMessage.textContent = `You win, ${playerSelection} beats ${computerSelection}`;
+      } else if (result == -1) {
+        computerScore += 1;
+        roundMessage.textContent = `You lose, ${computerSelection} beats ${playerSelection}`;
+      } else if (result == 0) {
+        roundMessage.textContent = `You tied, you both picked ${playerSelection}`;
+      }
+      score.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+      checkScore(playerScore, computerScore);
+    })
+
+    paper.addEventListener('click', () => {
+      playerSelection = "paper";
+      computerSelection = computerPlay();
+      result = playRound(playerSelection, computerSelection);
+      if (result == 1) {
+        playerScore += 1;
+        roundMessage.textContent = `You win, ${playerSelection} beats ${computerSelection}`;
+      } else if (result == -1) {
+        computerScore += 1;
+        roundMessage.textContent = `You lose, ${computerSelection} beats ${playerSelection}`;
+      } else if (result == 0) {
+        roundMessage.textContent = `You tied, you both picked ${playerSelection}`;
+      }
+      score.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+      checkScore(playerScore, computerScore);
+    })
+
+    scissors.addEventListener('click', () => {
+      playerSelection = "scissors";
+      computerSelection = computerPlay();
+      result = playRound(playerSelection, computerSelection);
+      if (result == 1) {
+        playerScore += 1;
+        roundMessage.textContent = `You win, ${playerSelection} beats ${computerSelection}`;
+      } else if (result == -1) {
+        computerScore += 1;
+        roundMessage.textContent = `You lose, ${computerSelection} beats ${playerSelection}`;
+      } else if (result == 0) {
+        roundMessage.textContent = `You tied, you both picked ${playerSelection}`;
+      }
+      score.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+      checkScore(playerScore, computerScore);
+    })
+  }
 
 game();
